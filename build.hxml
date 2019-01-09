@@ -1,0 +1,7 @@
+-cp src
+-D analyzer-optimize
+-lib interact
+-main Main
+-js www/assets/croc.js
+
+
