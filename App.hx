@@ -11,6 +11,8 @@ import interact.KeyCode as K;
 import croqmur.Croq;
 import croqmur.CoolPoint;
 import tablet.Tablet;
+
+
 class App {
 	var KB:KeyBoardManager = KeyBoardManager.getInstance();
 	var raf:(Float->Void)->Int;
@@ -26,6 +28,7 @@ class App {
 		raf = js.Browser.window.requestAnimationFrame;
 
 		var croc = new Croco(null);
+		croc.memoize();
 
 		var display = new CanvasRender(can);
 		display.addRenderable(croc);
@@ -38,7 +41,8 @@ class App {
 
 		raf(step);
 
-        KB.addListener(K.Shift,croc.memoize);
+        KB.addListener(Shift,croc.memoize);
+
 		new interact.Keynote();
 	}
 
@@ -122,6 +126,7 @@ class Croco implements IRenderable {
 		croq.up(e.clientX, e.clientY, (e.pointerType == "pen") ? e.pressure : 1);
 		doc.removeEventListener('pointermove', onMouseMove);
 		doc.removeEventListener('pointerup', onMouseUp);
+		trace( "up"+croq.mz);
 	}
 
 	function setPointerEvent(e:Dynamic) {

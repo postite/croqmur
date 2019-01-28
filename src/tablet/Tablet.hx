@@ -10,7 +10,7 @@ typedef PenApi={
 class Tablet{
 
 var plugin:Plugin;
- function new () {
+ public function new () {
      plugin = cast document.querySelector(
         'object[type=\'application/x-wacomtabletplugin\']');
     if (plugin ==null) {
@@ -20,37 +20,39 @@ var plugin:Plugin;
         plugin.style.top = '-1000px';
         document.body.appendChild(plugin);
     }
-    //return plugin;
-}
-
-public static function pen(){
-    var tablet = new Tablet();
-    return tablet.plugin.penAPI;
-}
-// Croquis.Tablet.pen = function () {
-//     var plugin = Croquis.Tablet.plugin();
     
-//     return plugin.penAPI;
-// }
+}
 
-public static function pressure(){
-    var pen = pen();
+
+
+public function pen(){
+    return this.plugin.penAPI;
+}
+public function pressure(){
+    var pen = this.plugin.penAPI;
     return (pen!=null && pen.pointerType!=null) ? pen.pressure : 1;
 }
-
-public static function isEraser():Bool{
-     var pen = pen();
+public function isEraser():Bool{
+    var pen = this.plugin.penAPI;
     return (pen!=null) ? pen.isEraser : false;
 }
-// Croquis.Tablet.pressure = function () {
-//     var pen = Croquis.Tablet.pen();
+
+// public static function pen(){
     
-//     return (pen && pen.pointerType) ? pen.pressure : 1;
+//     var tablet = new Tablet();
+//     return tablet.plugin.penAPI;
 // }
-// Croquis.Tablet.isEraser = function () {
-//     var pen = Croquis.Tablet.pen();
-//     return pen ? pen.isEraser : false;
+
+// public static function pressure(){
+//     var pen = pen();
+//     return (pen!=null && pen.pointerType!=null) ? pen.pressure : 1;
 // }
+
+// public static function isEraser():Bool{
+//      var pen = pen();
+//     return (pen!=null) ? pen.isEraser : false;
+// }
+
 
 }
 

@@ -2,5 +2,7 @@
     "haxe.displayConfigurations": [
 ["build.hxml"]
 
-    ]
+    ],
+    "liveServer.settings.multiRootWorkspaceName": "Croqmur",
+    "liveServer.settings.port": 5510
 }

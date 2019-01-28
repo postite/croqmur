@@ -1,19 +1,22 @@
 package croqmur;
 import croqmur.CoolPoint;
-@:enum abstract Col(String) from String to String{
-    var ocre="201, 185, 101";
-    var brique ="198, 88, 29";
-    var prusse="43, 117, 153";
-    var olive="86, 126, 62";
+
+import croqmur.CoolColor;
+
+enum DroState{
+	Norm;
+	But;
 }
+
+
 class Croq {
 	public var positions:Array<CoolPoint> = [];
 
 	var memo:CoolPoint;
 	var point:CoolPoint;
 	var trailong:Int = 200;
-
-	var mz:Array<CoolPoint>=[];
+	var _state:DroState=Norm;
+	public var mz:Array<CoolPoint>=[];
 
 	var memoz:Bool=false;
 
@@ -31,6 +34,8 @@ class Croq {
 			positions.shift();
 
 	}
+
+	
 
 	public function new() {
 		memo =  [];
@@ -55,12 +60,26 @@ class Croq {
            }
     }
 
-	public function move(x, y, press) {
+	public function move(x, y, ?press:Int,?buttons:Int) {
+		
+
 		point = [x, y, press];
+		if (buttons==3)
+		state(But);
+		else
+		state(Norm);
+
 		store(point);
 	}
 
-	function drawCircle(ctx:js.html.CanvasRenderingContext2D, _point:CoolPoint, ratio:Float,?rgb:Col="204, 102, 153") {
+	inline function state(s:DroState){
+		if( _state != s){
+		untyped console.log('set state to $s');
+		_state=s;
+		}
+	}
+
+	function drawCircle(ctx:js.html.CanvasRenderingContext2D, _point:CoolPoint, ratio:Float,?rgb:CoolColor="204, 102, 153") {
 		if (_point.press == -1)
 			return;
 		ctx.beginPath();
@@ -69,8 +88,13 @@ class Croq {
 		ctx.fill();
 	}
 
-	function drawTab(ctx:js.html.CanvasRenderingContext2D,befPoint:Point,curPoint:Point,ratio:Float,?rgb="204, 102, 153"){
-			
+	function drawTab(ctx:js.html.CanvasRenderingContext2D,befPoint:Point,curPoint:Point,ratio:Float,?rgb:CoolColor="204, 102, 153"){
+			rgb =switch(_state){
+				case Norm:
+					rgb;
+				case But:
+					brique;
+			}
 			ctx.beginPath();
 			ctx.lineWidth = (befPoint.press * 20);
 			ctx.lineJoin = "round";
@@ -80,15 +104,24 @@ class Croq {
 				ctx.moveTo(befPoint.x, befPoint.y);
 				ctx.lineTo(curPoint.x, curPoint.y);
                  ctx.stroke();
+				 #if debug
 				drawCircle(ctx, curPoint, ratio,brique);
+				#else
+				drawCircle(ctx, curPoint, ratio,rgb);
+				#end
                
 				
-			} else {			
+			} else {
+				#if debug			
 				drawCircle(ctx, point, ratio,ocre);
+				#else
+				drawCircle(ctx, point, ratio,rgb);
+				#end
 			}
 	}
     
 	public function render(ctx:js.html.CanvasRenderingContext2D) {
+		trace( "render");
 		var ratio:Float = 1.0;
 		for (i in 0...positions.length) {
 			// i++;
