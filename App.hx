@@ -5,11 +5,9 @@ import js.Browser.document as doc;
 // import murmur.display.Croquis.CroquisJs;
 import js.html.CanvasRenderingContext2D;
 
-import interact.KeyBoardManager;
-import interact.KeyCode as K;
-
+import keyboard.KeyBoardManager;
+import keyboard.KeyCode as K;
 import croqmur.Croq;
-import croqmur.CoolPoint;
 import tablet.Tablet;
 
 
@@ -32,6 +30,7 @@ class App {
 
 		var display = new CanvasRender(can);
 		display.addRenderable(croc);
+		
 
 		function step(timestamp:Float) {
 			// trace("hop");
@@ -43,8 +42,12 @@ class App {
 
         KB.addListener(Shift,croc.memoize);
 
-		new interact.Keynote();
+		new keyboard.Keynote();
+
+		
 	}
+
+	
 
 	public static function main() {
 		new App();
@@ -91,7 +94,7 @@ interface IRenderable {
 class Croco implements IRenderable {
 	public var croq:Croq;
 	public var enabled = true;
-    
+    var tablette:Tablet;
 	
     public function memoize(){
 		trace( "meme");
@@ -104,6 +107,7 @@ class Croco implements IRenderable {
 	}
 
 	public function init() {
+		tablette=new tablet.Tablet();
 		doc.addEventListener('pointerdown', function(e) {
 			setPointerEvent(e);
 			croq.down(e.clientX, e.clientY, (e.pointerType == "pen") ? e.pressure : 1);
@@ -129,13 +133,31 @@ class Croco implements IRenderable {
 		trace( "up"+croq.mz);
 	}
 
+	// function setPointerEvent(e:Dynamic) {
+	// 	// trace("tablet="+ untyped __js__('Croquis.Tablet.pen().pointerType'));
+	// 	if (e.pointerType != "pen" && Tablet.pen()!=null && Tablet.pen().pointerType!=null) { // it says its not a pen but it might be a wacom pen
+
+	// 		e.pointerType = "pen";
+	// 		e.pressure = Tablet.pressure();
+	// 		if (Tablet.isEraser()) {
+	// 			trace(("eraser"));
+	// 			untyped (Object).defineProperties(e, {
+	// 					"button": {value: 5},
+	// 					"buttons": {value: 32}
+	// 				});
+	// 		}
+	// 	}
+	// }
+
 	function setPointerEvent(e:Dynamic) {
+		var pen=tablette.pen();
 		// trace("tablet="+ untyped __js__('Croquis.Tablet.pen().pointerType'));
-		if (e.pointerType != "pen" && Tablet.pen()!=null && Tablet.pen().pointerType!=null) { // it says its not a pen but it might be a wacom pen
+		if (e.pointerType != "pen" && pen!=null && pen.pointerType!=null) { // it says its not a pen but it might be a wacom pen
 
 			e.pointerType = "pen";
-			e.pressure = Tablet.pressure();
-			if (Tablet.isEraser()) {
+		
+			e.pressure = tablette.pressure();
+			if (tablette.isEraser()) {
 				trace(("eraser"));
 				untyped (Object).defineProperties(e, {
 						"button": {value: 5},

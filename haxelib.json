@@ -1,0 +1,15 @@
+{
+    "name": "croqmur",
+    "url" : "",
+    "license": "MIT",
+    "tags": ["drawing"],
+    "description": "",
+    "version": "0.0.1",
+    "classPath": "src/",
+    "releasenote": "init",
+    "contributors": ["postite"],
+    "dependencies": {
+      "postite_droz": "",
+      "postite_touche":""
+    }
+}

@@ -1,0 +1,3 @@
+-D postite_touche=0.0.0
+# @install: lix --silent download "gh://github.com/postite/postite_touche#2ac1d506a17e0d586f5f5b808600943082db9269" into postite_touche/0.0.0/github/2ac1d506a17e0d586f5f5b808600943082db9269
+-cp ${HAXE_LIBCACHE}/postite_touche/0.0.0/github/2ac1d506a17e0d586f5f5b808600943082db9269/src

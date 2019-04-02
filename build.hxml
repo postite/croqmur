@@ -1,7 +1,9 @@
 -cp src
--D analyzer-optimize
--lib interact
+#-D analyzer-optimize
+-lib postite_droz
+-lib postite_touche
 -main Main
+-dce no
 -js www/assets/croc.js
 --times
 
