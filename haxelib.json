@@ -9,7 +9,7 @@
     "releasenote": "init",
     "contributors": ["postite"],
     "dependencies": {
-      "postite_droz": "",
-      "postite_touche":""
+      "postite_droz": "git:https://github.com/postite/postite_droz.git",
+      "postite_touche":"git:https://github.com/postite/postite_touche.git"
     }
 }
