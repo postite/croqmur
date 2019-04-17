@@ -4,7 +4,7 @@
     "license": "MIT",
     "tags": ["drawing"],
     "description": "",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "classPath": "src/",
     "releasenote": "init",
     "contributors": ["postite"],

@@ -2,11 +2,17 @@ package croqmur;
 //import croqmur.CoolPoint;
 //import thx.color.Rgb;
 //import croqmur.CoolColor;
+using tink.CoreApi;
 import postite.geom.CoolPoint;
 import postite.dro.Couleur;
 enum DroState{
 	Norm;
 	But2;
+}
+enum CroqState{
+	Memoizing;
+	Normal;
+
 }
 class Croq {
 	public var positions:Array<CoolPoint> = [];
@@ -17,7 +23,8 @@ class Croq {
 	public var _state:DroState=Norm;
 	public var waz:Bool=false;
 	public var mz:Array<CoolPoint>=[];
-
+	public var event:Signal<CroqState>;
+	var eventTrigger:SignalTrigger<CroqState>;
 	var memoz:Bool=false;
 
 	public function memoize(){
@@ -41,14 +48,15 @@ class Croq {
 	public function new() {
 		memo =  [];
 		point = [];
+		eventTrigger=Signal.trigger();
+		event=eventTrigger;
 	}
 
 	public function down(x, y, press) {
-
-		
 		store([x, y, -1]);
 		if (tim !=null)
 		tim.stop();
+		
 	}
 
 	var tim:haxe.Timer;
@@ -82,6 +90,7 @@ class Croq {
 	function doolMz(){
 		trace('dool $memoz');
 		waz=false;
+		eventTrigger.trigger(Memoizing);
 		var co=mz.copy();
 		if ( co[0]!=null){
 		co[0].press=-1;
@@ -93,6 +102,7 @@ class Croq {
 	}
 	function wazBut(){
 		waz=true;
+		eventTrigger.trigger(Normal);
 		trace("wasBut");
 	}
 
@@ -102,6 +112,7 @@ class Croq {
 			if( s==But2)doolMz();
 			trace ("mzlength="+mz.length );
 		untyped console.log('set state to $s');
+		
 		_state=s;
 		}
 	}
@@ -115,7 +126,6 @@ class Croq {
 		ctx.fillStyle=color;
 		ctx.fill();
 	}
-
 
 	function drawTab(ctx:js.html.CanvasRenderingContext2D,befPoint:CoolPoint,curPoint:CoolPoint,ratio:Float,?color:Couleur=Bleu){
 			ctx.beginPath();
