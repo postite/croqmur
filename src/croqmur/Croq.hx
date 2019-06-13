@@ -2,6 +2,8 @@ package croqmur;
 //import croqmur.CoolPoint;
 //import thx.color.Rgb;
 //import croqmur.CoolColor;
+import haxe.Timer;
+import js.html.Console;
 using tink.CoreApi;
 import postite.geom.CoolPoint;
 import postite.dro.Couleur;
@@ -16,23 +18,34 @@ enum CroqState{
 }
 class Croq {
 	public var positions:Array<CoolPoint> = [];
-
+	var record:Bool=false;
+	var play:Bool=false;
 	var memo:CoolPoint;
 	var point:CoolPoint;
 	var trailong:Int = 200;
+	public var size=10;
 	public var _state:DroState=Norm;
 	public var waz:Bool=false;
 	public var mz:Array<CoolPoint>=[];
+	public var rc:Array<CoolPoint>=[];
+	public var roc:Array<CoolPoint>=[];
 	public var event:Signal<CroqState>;
 	var eventTrigger:SignalTrigger<CroqState>;
 	var memoz:Bool=false;
-
-	public function memoize(){
+	@:isVar
+	public var length(default,set):Int;
+	
+	function set_length(n:Int){
+		return trailong=n;
+	}
+	public function memoize():Bool{
 		memoz=!memoz;
+		return memoz;
+		//memoz=true;
 	}
 
 	function store(point:CoolPoint) {
-		if( memoz){
+		if(memoz){
 			 mz.push(point);
 			
 			 return ;
@@ -43,7 +56,29 @@ class Croq {
 
 	}
 
-	
+	public function startRec(){
+		play=false;
+		rc=[];
+		roc=[];
+		record=true;
+	}
+	public function stopRec(){
+		record=false;
+	}
+	public function playRec(){
+		if (record) return;
+		trace( "play rec" +rc.length);
+		//positions=positions.concat(rc);
+		play=true;
+	}
+
+
+	function rec(point:CoolPoint){
+		if( record ){
+			rc.push(point);
+			return;
+		}
+	}
 
 	public function new() {
 		memo =  [];
@@ -73,7 +108,25 @@ class Croq {
 	public function move(x, y, ?press:Int,?buttons:Int) {
 
 		if( buttons==2)return;
-		if (buttons==3){
+		if (buttons==32 || buttons==5){
+		state(But2);
+		memoz=true;
+		point = [x, y, press];
+		store(point);
+		}else{
+		memoz=false;
+		state(Norm);
+		point = [x, y, press];
+		store(point);
+		}
+		rec(point);
+	}
+/*
+	public function move(x, y, ?press:Int,?buttons:Int) {
+
+		if( buttons==2)return;
+		if (memoz){
+			
 		state(But2);
 		memoz=true;
 		point = [x, y, press];
@@ -86,7 +139,7 @@ class Croq {
 		}
 		
 	}
-
+	*/
 	function doolMz(){
 		trace('dool $memoz');
 		waz=false;
@@ -121,15 +174,15 @@ class Croq {
 		if (_point.press == -1)
 			return;
 		ctx.beginPath();
-		ctx.arc(_point.x, _point.y, _point.press * 10, 0, 2 * Math.PI, true);
+		ctx.arc(_point.x, _point.y, _point.press * size/2, 0, 2 * Math.PI, true);
 		
 		ctx.fillStyle=color;
 		ctx.fill();
 	}
 
-	function drawTab(ctx:js.html.CanvasRenderingContext2D,befPoint:CoolPoint,curPoint:CoolPoint,ratio:Float,?color:Couleur=Bleu){
+	function drawTab(ctx:js.html.CanvasRenderingContext2D,befPoint:CoolPoint,curPoint:CoolPoint,ratio:Float,?color:Couleur=Noir){
 			ctx.beginPath();
-			ctx.lineWidth = (befPoint.press * 20);
+			ctx.lineWidth = (befPoint.press * size);
 			ctx.lineJoin = "round";
 			//var color:Couleur=Couleur.Bleu;
 
@@ -184,10 +237,30 @@ class Croq {
 
 			drawTab(ctx,befPoint,curPoint,ratio,Olive);
 		}
+
+		if(!play)return;
+		for (i in 0...roc.length) {
+			// i++;
+			ratio = (i + 1) / rc.length;
+			var z = (i - 1 > 0) ? i - 1 : i;
+			var befPoint = rc[z];
+			var curPoint =rc[i];
+
+			drawTab(ctx,befPoint,curPoint,ratio,Rouge);
+			
+		}
+		roc.push(rc.shift());
+
+		Timer.delay(function(){
+			if( roc.length > trailong)
+			roc.shift();	
+		},1000);
+
+		if( roc.length==0)
+		play=false;
 		
-
 	//	drawCircle(ctx, point, 1);
-
+		
 		// store(point);
 	}
 }
