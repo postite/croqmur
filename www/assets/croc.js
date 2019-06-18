@@ -1118,11 +1118,12 @@ var croqmur_DroState = $hxEnums["croqmur.DroState"] = { __ename__ : "croqmur.Dro
 	,But2: {_hx_index:1,__enum__:"croqmur.DroState",toString:$estr}
 };
 croqmur_DroState.__empty_constructs__ = [croqmur_DroState.Norm,croqmur_DroState.But2];
-var croqmur_CroqState = $hxEnums["croqmur.CroqState"] = { __ename__ : "croqmur.CroqState", __constructs__ : ["Memoizing","Normal"]
+var croqmur_CroqState = $hxEnums["croqmur.CroqState"] = { __ename__ : "croqmur.CroqState", __constructs__ : ["Memoizing","Normal","Recording"]
 	,Memoizing: {_hx_index:0,__enum__:"croqmur.CroqState",toString:$estr}
 	,Normal: {_hx_index:1,__enum__:"croqmur.CroqState",toString:$estr}
+	,Recording: {_hx_index:2,__enum__:"croqmur.CroqState",toString:$estr}
 };
-croqmur_CroqState.__empty_constructs__ = [croqmur_CroqState.Memoizing,croqmur_CroqState.Normal];
+croqmur_CroqState.__empty_constructs__ = [croqmur_CroqState.Memoizing,croqmur_CroqState.Normal,croqmur_CroqState.Recording];
 var croqmur_Croq = function() {
 	this.memoz = false;
 	this.roc = [];
@@ -1149,6 +1150,7 @@ croqmur_Croq.prototype = {
 	,memo: null
 	,point: null
 	,trailong: null
+	,colorLine: null
 	,size: null
 	,_state: null
 	,waz: null
@@ -1181,15 +1183,17 @@ croqmur_Croq.prototype = {
 		this.rc = [];
 		this.roc = [];
 		this.record = true;
+		tink_core__$Callback_CallbackList_$Impl_$.invoke(this.eventTrigger.handlers,croqmur_CroqState.Recording);
 	}
 	,stopRec: function() {
 		this.record = false;
+		tink_core__$Callback_CallbackList_$Impl_$.invoke(this.eventTrigger.handlers,croqmur_CroqState.Normal);
 	}
 	,playRec: function() {
 		if(this.record) {
 			return;
 		}
-		haxe_Log.trace("play rec" + this.rc.length,{ fileName : "src/croqmur/Croq.hx", lineNumber : 70, className : "croqmur.Croq", methodName : "playRec"});
+		haxe_Log.trace("play rec" + this.rc.length,{ fileName : "src/croqmur/Croq.hx", lineNumber : 77, className : "croqmur.Croq", methodName : "playRec"});
 		this.play = true;
 	}
 	,rec: function(point) {
@@ -1208,10 +1212,13 @@ croqmur_Croq.prototype = {
 	,up: function(x,y,press) {
 		var _gthis = this;
 		this.store(postite_geom__$CoolPoint_CoolPoint_$Impl_$.fromArray([x,y,-1]));
-		this.tim = new haxe_Timer(100);
+		this.tim = new haxe_Timer(1000);
 		this.tim.run = function() {
 			_gthis.positions.shift();
 		};
+	}
+	,set_colorLine: function(col) {
+		return this.colorLine = col;
 	}
 	,move: function(x,y,press,buttons) {
 		if(buttons == 2) {
@@ -1226,7 +1233,7 @@ croqmur_Croq.prototype = {
 				if(s == croqmur_DroState.But2) {
 					this.doolMz();
 				}
-				haxe_Log.trace("mzlength=" + this.mz.length,{ fileName : "src/croqmur/Croq.hx", lineNumber : 166, className : "croqmur.Croq", methodName : "state"});
+				haxe_Log.trace("mzlength=" + this.mz.length,{ fileName : "src/croqmur/Croq.hx", lineNumber : 178, className : "croqmur.Croq", methodName : "state"});
 				console.log("set state to " + Std.string(s));
 				this._state = s;
 			}
@@ -1243,7 +1250,7 @@ croqmur_Croq.prototype = {
 				if(s1 == croqmur_DroState.But2) {
 					this.doolMz();
 				}
-				haxe_Log.trace("mzlength=" + this.mz.length,{ fileName : "src/croqmur/Croq.hx", lineNumber : 166, className : "croqmur.Croq", methodName : "state"});
+				haxe_Log.trace("mzlength=" + this.mz.length,{ fileName : "src/croqmur/Croq.hx", lineNumber : 178, className : "croqmur.Croq", methodName : "state"});
 				console.log("set state to " + Std.string(s1));
 				this._state = s1;
 			}
@@ -1253,7 +1260,7 @@ croqmur_Croq.prototype = {
 		this.rec(this.point);
 	}
 	,doolMz: function() {
-		haxe_Log.trace("dool " + Std.string(this.memoz),{ fileName : "src/croqmur/Croq.hx", lineNumber : 144, className : "croqmur.Croq", methodName : "doolMz"});
+		haxe_Log.trace("dool " + Std.string(this.memoz),{ fileName : "src/croqmur/Croq.hx", lineNumber : 156, className : "croqmur.Croq", methodName : "doolMz"});
 		this.waz = false;
 		tink_core__$Callback_CallbackList_$Impl_$.invoke(this.eventTrigger.handlers,croqmur_CroqState.Memoizing);
 		var co = this.mz.slice();
@@ -1267,7 +1274,7 @@ croqmur_Croq.prototype = {
 	,wazBut: function() {
 		this.waz = true;
 		tink_core__$Callback_CallbackList_$Impl_$.invoke(this.eventTrigger.handlers,croqmur_CroqState.Normal);
-		haxe_Log.trace("wasBut",{ fileName : "src/croqmur/Croq.hx", lineNumber : 159, className : "croqmur.Croq", methodName : "wazBut"});
+		haxe_Log.trace("wasBut",{ fileName : "src/croqmur/Croq.hx", lineNumber : 171, className : "croqmur.Croq", methodName : "wazBut"});
 	}
 	,state: function(s) {
 		if(this._state != s) {
@@ -1277,7 +1284,7 @@ croqmur_Croq.prototype = {
 			if(s == croqmur_DroState.But2) {
 				this.doolMz();
 			}
-			haxe_Log.trace("mzlength=" + this.mz.length,{ fileName : "src/croqmur/Croq.hx", lineNumber : 166, className : "croqmur.Croq", methodName : "state"});
+			haxe_Log.trace("mzlength=" + this.mz.length,{ fileName : "src/croqmur/Croq.hx", lineNumber : 178, className : "croqmur.Croq", methodName : "state"});
 			console.log("set state to " + Std.string(s));
 			this._state = s;
 		}
@@ -1320,13 +1327,15 @@ croqmur_Croq.prototype = {
 			var z = i - 1 > 0 ? i - 1 : i;
 			var befPoint = this.positions[z];
 			var curPoint = this.positions[i];
-			this.drawTab(ctx,befPoint,curPoint,ratio,17767);
+			this.drawTab(ctx,befPoint,curPoint,ratio,this.colorLine);
 		}
 		var _g2 = 0;
 		var _g3 = this.mz.length;
 		while(_g2 < _g3) {
 			var i1 = _g2++;
-			ratio = (i1 + 1) / this.mz.length;
+			if(this.mz.length > this.trailong) {
+				ratio = (i1 + 1) / this.mz.length;
+			}
 			var z1 = i1 - 1 > 0 ? i1 - 1 : i1;
 			var befPoint1 = this.mz[z1];
 			var curPoint1 = this.mz[i1];
@@ -1339,11 +1348,15 @@ croqmur_Croq.prototype = {
 		var _g5 = this.roc.length;
 		while(_g4 < _g5) {
 			var i2 = _g4++;
-			ratio = (i2 + 1) / this.rc.length;
+			if(this.roc.length > this.trailong) {
+				ratio = (i2 + 1) / this.roc.length;
+			}
 			var z2 = i2 - 1 > 0 ? i2 - 1 : i2;
-			var befPoint2 = this.rc[z2];
-			var curPoint2 = this.rc[i2];
-			this.drawTab(ctx,befPoint2,curPoint2,ratio,13382400);
+			var befPoint2 = this.roc[z2];
+			var curPoint2 = this.roc[i2];
+			if(curPoint2 != null) {
+				this.drawTab(ctx,befPoint2,curPoint2,ratio,13382400);
+			}
 		}
 		this.roc.push(this.rc.shift());
 		haxe_Timer.delay(function() {
@@ -1356,7 +1369,7 @@ croqmur_Croq.prototype = {
 		}
 	}
 	,__class__: croqmur_Croq
-	,__properties__: {set_length:"set_length"}
+	,__properties__: {set_length:"set_length",set_colorLine:"set_colorLine"}
 };
 var haxe_StackItem = $hxEnums["haxe.StackItem"] = { __ename__ : "haxe.StackItem", __constructs__ : ["CFunction","Module","FilePos","Method","LocalFunction"]
 	,CFunction: {_hx_index:0,__enum__:"haxe.StackItem",toString:$estr}

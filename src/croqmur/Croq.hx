@@ -7,6 +7,7 @@ import js.html.Console;
 using tink.CoreApi;
 import postite.geom.CoolPoint;
 import postite.dro.Couleur;
+
 enum DroState{
 	Norm;
 	But2;
@@ -14,8 +15,10 @@ enum DroState{
 enum CroqState{
 	Memoizing;
 	Normal;
+	Recording;
 
 }
+
 class Croq {
 	public var positions:Array<CoolPoint> = [];
 	var record:Bool=false;
@@ -23,6 +26,8 @@ class Croq {
 	var memo:CoolPoint;
 	var point:CoolPoint;
 	var trailong:Int = 200;
+	@:isVar
+	public var colorLine(default,set):Couleur;
 	public var size=10;
 	public var _state:DroState=Norm;
 	public var waz:Bool=false;
@@ -61,9 +66,11 @@ class Croq {
 		rc=[];
 		roc=[];
 		record=true;
+		eventTrigger.trigger(Recording);
 	}
 	public function stopRec(){
 		record=false;
+		eventTrigger.trigger(Normal);
 	}
 	public function playRec(){
 		if (record) return;
@@ -95,15 +102,20 @@ class Croq {
 	}
 
 	var tim:haxe.Timer;
+
     public function up(x,y,press){
        store([x,y,-1]);
-	   
-	   
-    tim= new haxe.Timer(100);
+	      
+    tim= new haxe.Timer(1000);
        tim.run = function(){
+		   //if (positions.length > trailong )
            positions.shift();
            }
     }
+
+	public function set_colorLine(col:Couleur){
+		return  this.colorLine=col;
+	}
 
 	public function move(x, y, ?press:Int,?buttons:Int) {
 
@@ -150,8 +162,8 @@ class Croq {
 		co[co.length-1].press=-1;
 		}
 		positions=positions.concat(co);
-
 		mz=[];
+
 	}
 	function wazBut(){
 		waz=true;
@@ -165,7 +177,6 @@ class Croq {
 			if( s==But2)doolMz();
 			trace ("mzlength="+mz.length );
 		untyped console.log('set state to $s');
-		
 		_state=s;
 		}
 	}
@@ -185,7 +196,6 @@ class Croq {
 			ctx.lineWidth = (befPoint.press * size);
 			ctx.lineJoin = "round";
 			//var color:Couleur=Couleur.Bleu;
-
 			var light=color.lighten(1-ratio);
 			#if debug
 			ctx.strokeStyle=Jaune;
@@ -219,17 +229,18 @@ class Croq {
 		var ratio:Float = 1.0;
 		for (i in 0...positions.length) {
 			// i++;
+			//if(positions.length>trailong)
 			ratio = (i + 1) / positions.length;
 			var z = (i - 1 > 0) ? i - 1 : i;
 			var befPoint = positions[z];
 			var curPoint = positions[i];
-
-			drawTab(ctx,befPoint,curPoint,ratio,Prusse);
+			drawTab(ctx,befPoint,curPoint,ratio,currentColor);
 		}
 
 		
 		for (i in 0...mz.length) {
 			// i++;
+			if(mz.length>trailong)
 			ratio = (i + 1) / mz.length;
 			var z = (i - 1 > 0) ? i - 1 : i;
 			var befPoint = mz[z];
@@ -237,15 +248,17 @@ class Croq {
 
 			drawTab(ctx,befPoint,curPoint,ratio,Olive);
 		}
-
+		
 		if(!play)return;
 		for (i in 0...roc.length) {
 			// i++;
-			ratio = (i + 1) / rc.length;
-			var z = (i - 1 > 0) ? i - 1 : i;
-			var befPoint = rc[z];
-			var curPoint =rc[i];
+			if(roc.length>trailong)
+			ratio = (i + 1) / roc.length;
 
+			var z = (i - 1 > 0) ? i - 1 : i;
+			var befPoint = roc[z];
+			var curPoint =roc[i];
+			if(curPoint!=null)
 			drawTab(ctx,befPoint,curPoint,ratio,Rouge);
 			
 		}
@@ -256,7 +269,7 @@ class Croq {
 			roc.shift();	
 		},1000);
 
-		if( roc.length==0)
+		if(roc.length==0)
 		play=false;
 		
 	//	drawCircle(ctx, point, 1);
