@@ -3,4 +3,5 @@
 -lib hxDelaunay
 -lib tink_core
 -lib hxClipper
--cp ${HAXE_LIBCACHE}/postite_droz/0.0.1/github/6487eb26c417c0db00890bf4c81459d7788a05fa/src/
+#-cp ${HAXE_LIBCACHE}/postite_droz/0.0.1/github/6487eb26c417c0db00890bf4c81459d7788a05fa/src/
+-cp /Users/ut/Documents/LAB/postite_droz/src/

@@ -1113,6 +1113,19 @@ _$UInt_UInt_$Impl_$.toFloat = function(this1) {
 		return int + 0.0;
 	}
 };
+var croqmur__$CrocPoint_CrocPoint_$Impl_$ = {};
+$hxClasses["croqmur._CrocPoint.CrocPoint_Impl_"] = croqmur__$CrocPoint_CrocPoint_$Impl_$;
+croqmur__$CrocPoint_CrocPoint_$Impl_$.__name__ = "croqmur._CrocPoint.CrocPoint_Impl_";
+croqmur__$CrocPoint_CrocPoint_$Impl_$._new = function(x,y,p,c) {
+	if(c == null) {
+		c = 17767;
+	}
+	var this1 = { x : x, y : y, press : p, color : c};
+	return this1;
+};
+croqmur__$CrocPoint_CrocPoint_$Impl_$.fromArray = function(a) {
+	return croqmur__$CrocPoint_CrocPoint_$Impl_$._new(a[0],a[1],a[2],a[3]);
+};
 var croqmur_DroState = $hxEnums["croqmur.DroState"] = { __ename__ : "croqmur.DroState", __constructs__ : ["Norm","But2"]
 	,Norm: {_hx_index:0,__enum__:"croqmur.DroState",toString:$estr}
 	,But2: {_hx_index:1,__enum__:"croqmur.DroState",toString:$estr}
@@ -1136,8 +1149,8 @@ var croqmur_Croq = function() {
 	this.play = false;
 	this.record = false;
 	this.positions = [];
-	this.memo = postite_geom__$CoolPoint_CoolPoint_$Impl_$.fromArray([]);
-	this.point = postite_geom__$CoolPoint_CoolPoint_$Impl_$.fromArray([]);
+	this.memo = croqmur__$CrocPoint_CrocPoint_$Impl_$.fromArray([]);
+	this.point = croqmur__$CrocPoint_CrocPoint_$Impl_$.fromArray([]);
 	this.eventTrigger = tink_core__$Signal_Signal_$Impl_$.trigger();
 	this.event = this.eventTrigger;
 };
@@ -1193,7 +1206,7 @@ croqmur_Croq.prototype = {
 		if(this.record) {
 			return;
 		}
-		haxe_Log.trace("play rec" + this.rc.length,{ fileName : "src/croqmur/Croq.hx", lineNumber : 77, className : "croqmur.Croq", methodName : "playRec"});
+		haxe_Log.trace("play rec" + this.rc.length,{ fileName : "src/croqmur/Croq.hx", lineNumber : 78, className : "croqmur.Croq", methodName : "playRec"});
 		this.play = true;
 	}
 	,rec: function(point) {
@@ -1203,7 +1216,7 @@ croqmur_Croq.prototype = {
 		}
 	}
 	,down: function(x,y,press) {
-		this.store(postite_geom__$CoolPoint_CoolPoint_$Impl_$.fromArray([x,y,-1]));
+		this.store(croqmur__$CrocPoint_CrocPoint_$Impl_$.fromArray([x,y,-1,this.colorLine]));
 		if(this.tim != null) {
 			this.tim.stop();
 		}
@@ -1211,7 +1224,7 @@ croqmur_Croq.prototype = {
 	,tim: null
 	,up: function(x,y,press) {
 		var _gthis = this;
-		this.store(postite_geom__$CoolPoint_CoolPoint_$Impl_$.fromArray([x,y,-1]));
+		this.store(croqmur__$CrocPoint_CrocPoint_$Impl_$.fromArray([x,y,-1,this.colorLine]));
 		this.tim = new haxe_Timer(1000);
 		this.tim.run = function() {
 			_gthis.positions.shift();
@@ -1233,12 +1246,12 @@ croqmur_Croq.prototype = {
 				if(s == croqmur_DroState.But2) {
 					this.doolMz();
 				}
-				haxe_Log.trace("mzlength=" + this.mz.length,{ fileName : "src/croqmur/Croq.hx", lineNumber : 178, className : "croqmur.Croq", methodName : "state"});
+				haxe_Log.trace("mzlength=" + this.mz.length,{ fileName : "src/croqmur/Croq.hx", lineNumber : 180, className : "croqmur.Croq", methodName : "state"});
 				console.log("set state to " + Std.string(s));
 				this._state = s;
 			}
 			this.memoz = true;
-			this.point = postite_geom__$CoolPoint_CoolPoint_$Impl_$.fromArray([x,y,press]);
+			this.point = croqmur__$CrocPoint_CrocPoint_$Impl_$.fromArray([x,y,press,this.colorLine]);
 			this.store(this.point);
 		} else {
 			this.memoz = false;
@@ -1250,17 +1263,17 @@ croqmur_Croq.prototype = {
 				if(s1 == croqmur_DroState.But2) {
 					this.doolMz();
 				}
-				haxe_Log.trace("mzlength=" + this.mz.length,{ fileName : "src/croqmur/Croq.hx", lineNumber : 178, className : "croqmur.Croq", methodName : "state"});
+				haxe_Log.trace("mzlength=" + this.mz.length,{ fileName : "src/croqmur/Croq.hx", lineNumber : 180, className : "croqmur.Croq", methodName : "state"});
 				console.log("set state to " + Std.string(s1));
 				this._state = s1;
 			}
-			this.point = postite_geom__$CoolPoint_CoolPoint_$Impl_$.fromArray([x,y,press]);
+			this.point = croqmur__$CrocPoint_CrocPoint_$Impl_$.fromArray([x,y,press,this.colorLine]);
 			this.store(this.point);
 		}
 		this.rec(this.point);
 	}
 	,doolMz: function() {
-		haxe_Log.trace("dool " + Std.string(this.memoz),{ fileName : "src/croqmur/Croq.hx", lineNumber : 156, className : "croqmur.Croq", methodName : "doolMz"});
+		haxe_Log.trace("dool " + Std.string(this.memoz),{ fileName : "src/croqmur/Croq.hx", lineNumber : 158, className : "croqmur.Croq", methodName : "doolMz"});
 		this.waz = false;
 		tink_core__$Callback_CallbackList_$Impl_$.invoke(this.eventTrigger.handlers,croqmur_CroqState.Memoizing);
 		var co = this.mz.slice();
@@ -1274,7 +1287,7 @@ croqmur_Croq.prototype = {
 	,wazBut: function() {
 		this.waz = true;
 		tink_core__$Callback_CallbackList_$Impl_$.invoke(this.eventTrigger.handlers,croqmur_CroqState.Normal);
-		haxe_Log.trace("wasBut",{ fileName : "src/croqmur/Croq.hx", lineNumber : 171, className : "croqmur.Croq", methodName : "wazBut"});
+		haxe_Log.trace("wasBut",{ fileName : "src/croqmur/Croq.hx", lineNumber : 173, className : "croqmur.Croq", methodName : "wazBut"});
 	}
 	,state: function(s) {
 		if(this._state != s) {
@@ -1284,7 +1297,7 @@ croqmur_Croq.prototype = {
 			if(s == croqmur_DroState.But2) {
 				this.doolMz();
 			}
-			haxe_Log.trace("mzlength=" + this.mz.length,{ fileName : "src/croqmur/Croq.hx", lineNumber : 178, className : "croqmur.Croq", methodName : "state"});
+			haxe_Log.trace("mzlength=" + this.mz.length,{ fileName : "src/croqmur/Croq.hx", lineNumber : 180, className : "croqmur.Croq", methodName : "state"});
 			console.log("set state to " + Std.string(s));
 			this._state = s;
 		}
@@ -1305,6 +1318,7 @@ croqmur_Croq.prototype = {
 		ctx.beginPath();
 		ctx.lineWidth = befPoint.press * this.size;
 		ctx.lineJoin = "round";
+		color = curPoint.color;
 		var light = postite_dro__$Couleur_Couleur_$Impl_$.lighten(color,1 - ratio);
 		ctx.strokeStyle = postite_dro__$Couleur_Couleur_$Impl_$.toHex(light);
 		if(befPoint.press != -1) {
@@ -3028,6 +3042,12 @@ postite_dro__$Couleur_Couleur_$Impl_$.fromString = function(s) {
 		return postite_dro__$Couleur_Couleur_$Impl_$._new(Std.parseInt(s));
 	}
 	return postite_dro__$Couleur_Couleur_$Impl_$._new(0);
+};
+postite_dro__$Couleur_Couleur_$Impl_$.toFloat = function(n) {
+	return n * 1.0;
+};
+postite_dro__$Couleur_Couleur_$Impl_$.fromFloat = function(n) {
+	return postite_dro__$Couleur_Couleur_$Impl_$._new(n | 0);
 };
 postite_dro__$Couleur_Couleur_$Impl_$.mix = function(this1,color,strength) {
 	var output = postite_dro__$Couleur_Couleur_$Impl_$._new(0);

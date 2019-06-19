@@ -1,11 +1,11 @@
 package croqmur;
-//import croqmur.CoolPoint;
+import croqmur.CrocPoint;
 //import thx.color.Rgb;
 //import croqmur.CoolColor;
 import haxe.Timer;
 import js.html.Console;
 using tink.CoreApi;
-import postite.geom.CoolPoint;
+//import postite.geom.CrocPoint;
 import postite.dro.Couleur;
 
 enum DroState{
@@ -20,26 +20,28 @@ enum CroqState{
 }
 
 class Croq {
-	public var positions:Array<CoolPoint> = [];
+	public var positions:Array<CrocPoint> = [];
 	var record:Bool=false;
 	var play:Bool=false;
-	var memo:CoolPoint;
-	var point:CoolPoint;
-	var trailong:Int = 200;
+	var memo:CrocPoint;
+	var point:CrocPoint;
+	public var trailong:Int = 200;
+
 	@:isVar
 	public var colorLine(default,set):Couleur;
 	public var size=10;
+	
 	public var _state:DroState=Norm;
 	public var waz:Bool=false;
-	public var mz:Array<CoolPoint>=[];
-	public var rc:Array<CoolPoint>=[];
-	public var roc:Array<CoolPoint>=[];
+	public var mz:Array<CrocPoint>=[];
+	public var rc:Array<CrocPoint>=[];
+	public var roc:Array<CrocPoint>=[];
 	public var event:Signal<CroqState>;
 	var eventTrigger:SignalTrigger<CroqState>;
 	var memoz:Bool=false;
+
 	@:isVar
 	public var length(default,set):Int;
-	
 	function set_length(n:Int){
 		return trailong=n;
 	}
@@ -49,10 +51,9 @@ class Croq {
 		//memoz=true;
 	}
 
-	function store(point:CoolPoint) {
+	function store(point:CrocPoint) {
 		if(memoz){
 			 mz.push(point);
-			
 			 return ;
 		}
 		positions.push(point);
@@ -80,7 +81,7 @@ class Croq {
 	}
 
 
-	function rec(point:CoolPoint){
+	function rec(point:CrocPoint){
 		if( record ){
 			rc.push(point);
 			return;
@@ -90,12 +91,13 @@ class Croq {
 	public function new() {
 		memo =  [];
 		point = [];
+
 		eventTrigger=Signal.trigger();
 		event=eventTrigger;
 	}
 
 	public function down(x, y, press) {
-		store([x, y, -1]);
+		store([x, y, -1,colorLine]);
 		if (tim !=null)
 		tim.stop();
 		
@@ -104,7 +106,7 @@ class Croq {
 	var tim:haxe.Timer;
 
     public function up(x,y,press){
-       store([x,y,-1]);
+       store([x,y,-1,colorLine]);
 	      
     tim= new haxe.Timer(1000);
        tim.run = function(){
@@ -123,12 +125,12 @@ class Croq {
 		if (buttons==32 || buttons==5){
 		state(But2);
 		memoz=true;
-		point = [x, y, press];
+		point = [x, y, press,colorLine];
 		store(point);
 		}else{
 		memoz=false;
 		state(Norm);
-		point = [x, y, press];
+		point = [x, y, press,colorLine];
 		store(point);
 		}
 		rec(point);
@@ -181,7 +183,7 @@ class Croq {
 		}
 	}
 
-	function drawCircle(ctx:js.html.CanvasRenderingContext2D, _point:CoolPoint, ratio:Float,color:Couleur) {
+	function drawCircle(ctx:js.html.CanvasRenderingContext2D, _point:CrocPoint, ratio:Float,color:Couleur) {
 		if (_point.press == -1)
 			return;
 		ctx.beginPath();
@@ -191,10 +193,12 @@ class Croq {
 		ctx.fill();
 	}
 
-	function drawTab(ctx:js.html.CanvasRenderingContext2D,befPoint:CoolPoint,curPoint:CoolPoint,ratio:Float,?color:Couleur=Noir){
+	function drawTab(ctx:js.html.CanvasRenderingContext2D,befPoint:CrocPoint,curPoint:CrocPoint,ratio:Float,?color:Couleur=Noir){
 			ctx.beginPath();
+			
 			ctx.lineWidth = (befPoint.press * size);
 			ctx.lineJoin = "round";
+			color=curPoint.color;
 			//var color:Couleur=Couleur.Bleu;
 			var light=color.lighten(1-ratio);
 			#if debug
@@ -234,7 +238,7 @@ class Croq {
 			var z = (i - 1 > 0) ? i - 1 : i;
 			var befPoint = positions[z];
 			var curPoint = positions[i];
-			drawTab(ctx,befPoint,curPoint,ratio,currentColor);
+			drawTab(ctx,befPoint,curPoint,ratio,colorLine);
 		}
 
 		
