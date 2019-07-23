@@ -28,6 +28,10 @@ class Croq {
 	public var trailong:Int = 200;
 
 	@:isVar
+	public var ghost(default,set):Bool =true;
+
+
+	@:isVar
 	public var colorLine(default,set):Couleur;
 	public var size=10;
 	
@@ -40,10 +44,29 @@ class Croq {
 	var eventTrigger:SignalTrigger<CroqState>;
 	var memoz:Bool=false;
 
+
+	public function reset(){
+		this.positions=[];
+		this.rc=[];
+		this.mz=[];
+		this.roc=[];
+	}
+	public function big(){
+		size++;
+	}
+	public function small(){
+		size--;
+	}
+
 	@:isVar
 	public var length(default,set):Int;
 	function set_length(n:Int){
 		return trailong=n;
+	}
+	@:isVar
+	public var shiftTime(default,set):Int;
+	function set_shiftTime(n:Int){
+		return shiftTime=n;
 	}
 	public function memoize():Bool{
 		memoz=!memoz;
@@ -57,7 +80,7 @@ class Croq {
 			 return ;
 		}
 		positions.push(point);
-		if (positions.length > trailong)
+		if (positions.length > trailong && ghost)
 			positions.shift();
 
 	}
@@ -91,7 +114,7 @@ class Croq {
 	public function new() {
 		memo =  [];
 		point = [];
-
+		shiftTime=500;
 		eventTrigger=Signal.trigger();
 		event=eventTrigger;
 	}
@@ -99,6 +122,7 @@ class Croq {
 	public function down(x, y, press) {
 		store([x, y, -1,colorLine]);
 		if (tim !=null)
+		if (ghost)
 		tim.stop();
 		
 	}
@@ -107,22 +131,28 @@ class Croq {
 
     public function up(x,y,press){
        store([x,y,-1,colorLine]);
-	      
-    tim= new haxe.Timer(1000);
+
+	if(ghost){      
+    tim= new haxe.Timer(shiftTime);
        tim.run = function(){
 		   //if (positions.length > trailong )
            positions.shift();
            }
+	}
     }
 
-	public function set_colorLine(col:Couleur){
+	 function set_colorLine(col:Couleur){
 		return  this.colorLine=col;
+	}
+
+	 function set_ghost(gh:Bool){
+		return  this.ghost=gh;
 	}
 
 	public function move(x, y, ?press:Int,?buttons:Int) {
 
 		if( buttons==2)return;
-		if (buttons==32 || buttons==5){
+		if ( buttons==32 || buttons==5 ){
 		state(But2);
 		memoz=true;
 		point = [x, y, press,colorLine];
@@ -193,7 +223,7 @@ class Croq {
 		ctx.fill();
 	}
 
-	function drawTab(ctx:js.html.CanvasRenderingContext2D,befPoint:CrocPoint,curPoint:CrocPoint,ratio:Float,?color:Couleur=Noir){
+	function drawTab(ctx:js.html.CanvasRenderingContext2D,befPoint:CrocPoint,curPoint:CrocPoint,ratio:Float,?color:Couleur=Prusse){
 			ctx.beginPath();
 			
 			ctx.lineWidth = (befPoint.press * size);
@@ -271,7 +301,7 @@ class Croq {
 		Timer.delay(function(){
 			if( roc.length > trailong)
 			roc.shift();	
-		},1000);
+		},shiftTime);
 
 		if(roc.length==0)
 		play=false;
