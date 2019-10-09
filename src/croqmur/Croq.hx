@@ -1,4 +1,5 @@
 package croqmur;
+
 import croqmur.CrocPoint;
 //import thx.color.Rgb;
 //import croqmur.CoolColor;
@@ -7,6 +8,8 @@ import js.html.Console;
 using tink.CoreApi;
 //import postite.geom.CrocPoint;
 import postite.dro.Couleur;
+
+
 
 enum DroState{
 	Norm;
@@ -20,16 +23,17 @@ enum CroqState{
 }
 
 class Croq {
+
 	public var positions:Array<CrocPoint> = [];
 	var record:Bool=false;
 	var play:Bool=false;
 	var memo:CrocPoint;
 	var point:CrocPoint;
+	public static var forceBlack:Bool=false;
 	public var trailong:Int = 200;
 
 	@:isVar
 	public var ghost(default,set):Bool =true;
-
 
 	@:isVar
 	public var colorLine(default,set):Couleur;
@@ -46,15 +50,18 @@ class Croq {
 
 
 	public function reset(){
+		
 		this.positions=[];
 		this.rc=[];
 		this.mz=[];
 		this.roc=[];
+
 	}
-	public function big(){
+	public function bigger(){
 		size++;
 	}
-	public function small(){
+	public function smaller(){
+		if( size > 0 )
 		size--;
 	}
 
@@ -228,33 +235,33 @@ class Croq {
 			
 			ctx.lineWidth = (befPoint.press * size);
 			ctx.lineJoin = "round";
+			if (!forceBlack)
 			color=curPoint.color;
+			else 
+			color=Couleur.Noir;
+			#if debug
+			color=Jaune;
+			#end
 			//var color:Couleur=Couleur.Bleu;
 			var light=color.lighten(1-ratio);
-			#if debug
-			ctx.strokeStyle=Jaune;
-			#else
+			
 			ctx.strokeStyle=light;
-			#end
+			
 			
 		//	trace('color=$color');
 			if (befPoint.press != -1) {
 				ctx.moveTo(befPoint.x, befPoint.y);
 				ctx.lineTo(curPoint.x, curPoint.y);
                  ctx.stroke();
-				 #if debug
-				drawCircle(ctx, curPoint, ratio,Jaune);
-				#else
+				
 				drawCircle(ctx, curPoint, ratio,light);
-				#end
+				
                
 				
 			} else {
-				#if debug			
-				drawCircle(ctx, point, ratio,Jaune);
-				#else
+				
 				drawCircle(ctx, point, ratio,light);
-				#end
+				
 			}
 	}
     

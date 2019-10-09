@@ -1225,7 +1225,7 @@ croqmur_Croq.prototype = {
 		if(this.record) {
 			return;
 		}
-		haxe_Log.trace("play rec" + this.rc.length,{ fileName : "src/croqmur/Croq.hx", lineNumber : 101, className : "croqmur.Croq", methodName : "playRec"});
+		haxe_Log.trace("play rec" + this.rc.length,{ fileName : "src/croqmur/Croq.hx", lineNumber : 102, className : "croqmur.Croq", methodName : "playRec"});
 		this.play = true;
 	}
 	,rec: function(point) {
@@ -1272,7 +1272,7 @@ croqmur_Croq.prototype = {
 				if(s == croqmur_DroState.But2) {
 					this.doolMz();
 				}
-				haxe_Log.trace("mzlength=" + this.mz.length,{ fileName : "src/croqmur/Croq.hx", lineNumber : 210, className : "croqmur.Croq", methodName : "state"});
+				haxe_Log.trace("mzlength=" + this.mz.length,{ fileName : "src/croqmur/Croq.hx", lineNumber : 211, className : "croqmur.Croq", methodName : "state"});
 				console.log("set state to " + Std.string(s));
 				this._state = s;
 			}
@@ -1289,7 +1289,7 @@ croqmur_Croq.prototype = {
 				if(s1 == croqmur_DroState.But2) {
 					this.doolMz();
 				}
-				haxe_Log.trace("mzlength=" + this.mz.length,{ fileName : "src/croqmur/Croq.hx", lineNumber : 210, className : "croqmur.Croq", methodName : "state"});
+				haxe_Log.trace("mzlength=" + this.mz.length,{ fileName : "src/croqmur/Croq.hx", lineNumber : 211, className : "croqmur.Croq", methodName : "state"});
 				console.log("set state to " + Std.string(s1));
 				this._state = s1;
 			}
@@ -1299,7 +1299,7 @@ croqmur_Croq.prototype = {
 		this.rec(this.point);
 	}
 	,doolMz: function() {
-		haxe_Log.trace("dool " + Std.string(this.memoz),{ fileName : "src/croqmur/Croq.hx", lineNumber : 188, className : "croqmur.Croq", methodName : "doolMz"});
+		haxe_Log.trace("dool " + Std.string(this.memoz),{ fileName : "src/croqmur/Croq.hx", lineNumber : 189, className : "croqmur.Croq", methodName : "doolMz"});
 		this.waz = false;
 		tink_core__$Callback_CallbackList_$Impl_$.invoke(this.eventTrigger.handlers,croqmur_CroqState.Memoizing);
 		var co = this.mz.slice();
@@ -1313,7 +1313,7 @@ croqmur_Croq.prototype = {
 	,wazBut: function() {
 		this.waz = true;
 		tink_core__$Callback_CallbackList_$Impl_$.invoke(this.eventTrigger.handlers,croqmur_CroqState.Normal);
-		haxe_Log.trace("wasBut",{ fileName : "src/croqmur/Croq.hx", lineNumber : 203, className : "croqmur.Croq", methodName : "wazBut"});
+		haxe_Log.trace("wasBut",{ fileName : "src/croqmur/Croq.hx", lineNumber : 204, className : "croqmur.Croq", methodName : "wazBut"});
 	}
 	,state: function(s) {
 		if(this._state != s) {
@@ -1323,7 +1323,7 @@ croqmur_Croq.prototype = {
 			if(s == croqmur_DroState.But2) {
 				this.doolMz();
 			}
-			haxe_Log.trace("mzlength=" + this.mz.length,{ fileName : "src/croqmur/Croq.hx", lineNumber : 210, className : "croqmur.Croq", methodName : "state"});
+			haxe_Log.trace("mzlength=" + this.mz.length,{ fileName : "src/croqmur/Croq.hx", lineNumber : 211, className : "croqmur.Croq", methodName : "state"});
 			console.log("set state to " + Std.string(s));
 			this._state = s;
 		}
