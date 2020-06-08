@@ -8,7 +8,7 @@ import js.html.Console;
 using tink.CoreApi;
 //import postite.geom.CrocPoint;
 import postite.dro.Couleur;
-
+import postite.geom.CoolPoint;
 
 
 enum DroState{
@@ -46,6 +46,7 @@ class Croq {
 	public var roc:Array<CrocPoint>=[];
 	public var event:Signal<CroqState>;
 	var eventTrigger:SignalTrigger<CroqState>;
+
 	var memoz:Bool=false;
 
 
@@ -99,9 +100,12 @@ class Croq {
 		record=true;
 		eventTrigger.trigger(Recording);
 	}
-	public function stopRec(){
+	public function stopRec():Array<croqmur.CrocPoint>{
+
 		record=false;
 		eventTrigger.trigger(Normal);
+		return rc;
+
 	}
 	public function playRec(){
 		if (record) return;

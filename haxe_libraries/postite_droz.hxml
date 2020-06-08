@@ -1,7 +1,7 @@
--D postite_droz=0.0.1
-# @install: lix --silent download "gh://github.com/postite/postite_droz#6487eb26c417c0db00890bf4c81459d7788a05fa" into postite_droz/0.0.1/github/6487eb26c417c0db00890bf4c81459d7788a05fa
+# @install: lix --silent download "gh://github.com/postite/postite_droz#48e9e55dab9bd99bf570e4e60525862398274936" into postite_droz/0.0.14/github/48e9e55dab9bd99bf570e4e60525862398274936
+-lib hx-vector2d
+-lib hxClipper
 -lib hxDelaunay
 -lib tink_core
--lib hxClipper
-#-cp ${HAXE_LIBCACHE}/postite_droz/0.0.1/github/6487eb26c417c0db00890bf4c81459d7788a05fa/src/
--cp /Users/ut/Documents/LAB/postite_droz/src/
+-cp ${HAXE_LIBCACHE}/postite_droz/0.0.14/github/48e9e55dab9bd99bf570e4e60525862398274936/src/
+-D postite_droz=0.0.14
